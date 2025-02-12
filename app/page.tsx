@@ -197,7 +197,7 @@ export default function Chatbot() {
                   }}
                   className="truncate flex-1 text-left"
                 >
-                  Chat {index + 1}
+                  {session.messages.length > 0 ? session.messages[0].user || session.messages[0].bot : "Novo Chat"}
                 </button>
                 <button
                   onClick={() => deleteChat(session.id)}
