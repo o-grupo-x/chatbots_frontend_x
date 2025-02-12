@@ -53,7 +53,7 @@ export default function Chatbot() {
     const newSessionId = uuidv4();
     const newSession = {
       id: newSessionId,
-      name: `Chat ${sessions.length + 1}`,
+      name: `Chat ${sessions.length + 1} - ${availableModels.find(m => m.value === selectedModel)?.name}`,
       model: selectedModel, // Define o modelo do chat com base no dropdown atual
       messages: [],
     };
