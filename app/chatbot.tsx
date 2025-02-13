@@ -18,30 +18,47 @@ const availableModels = [
   { name: "DeepSeek", value: "deepseek", type: "deepseek" },
 ];
 
+interface ChatSession {
+  id: string;
+  name: string;
+  model: string;
+  messages: { user: string; bot: string }[];
+}
+
 export default function Chatbot() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<{ user: string; bot: string }[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [sidebarOpen] = useState(false);
-  const [sessions, setSessions] = useState([]);
-  const [currentSession, setCurrentSession] = useState(null);
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [currentSession, setCurrentSession] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState(availableModels[0].value);
-  const [editingSessionId, setEditingSessionId] = useState(null);
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
+
+ 
+  
 
   useEffect(() => {
     localforage.getItem("chat_sessions").then((storedSessions) => {
-      if (storedSessions) setSessions(storedSessions);
+      if (storedSessions && Array.isArray(storedSessions)) {
+        setSessions(storedSessions as ChatSession[]); 
+      } else {
+        setSessions([]);
+      }
     });
   }, []);
+  
 
   useEffect(() => {
     localforage.setItem("chat_sessions", sessions);
   }, [sessions]);
 
-  const getApiRoute = () =>
-    modelRoutes[availableModels.find((m) => m.value === selectedModel)?.type || "gpt"];
+  type ModelType = "gpt" | "deepseek"; 
 
-  const renameChat = (sessionId, newName) => {
+  const getApiRoute = () =>
+  modelRoutes[(availableModels.find((m) => m.value === selectedModel)?.type as ModelType) || "gpt"];
+
+  const renameChat = (sessionId: string, newName: string) => {
     setSessions((prevSessions) =>
       prevSessions.map((session) =>
         session.id === sessionId ? { ...session, name: newName } : session
@@ -62,7 +79,7 @@ export default function Chatbot() {
     setCurrentSession(newSessionId);
   };
 
-  const deleteChat = (sessionId) => {
+  const deleteChat = (sessionId: string) => {
     setSessions(sessions.filter((session) => session.id !== sessionId));
     if (currentSession === sessionId) {
       setMessages([]);
@@ -70,7 +87,7 @@ export default function Chatbot() {
     }
   };
 
-  const loadChat = (sessionId) => {
+  const loadChat = (sessionId: string) => {
     const session = sessions.find((s) => s.id === sessionId);
     if (session) {
       setCurrentSession(sessionId);
@@ -145,7 +162,11 @@ export default function Chatbot() {
             {sessions.map((session) => (
               <div key={session.id} className="flex items-center justify-between p-2 w-full rounded-lg hover:bg-gray-700">
                 {editingSessionId === session.id ? (
-                  <input type="text" className="bg-transparent border-b border-gray-500 text-white flex-1" value={session.name} autoFocus onChange={(e) => renameChat(session.id, e.target.value)} onBlur={() => setEditingSessionId(null)} onKeyDown={(e) => e.key === "Enter" && setEditingSessionId(null)} />
+                  <input type="text" className="bg-transparent border-b border-gray-500 text-white flex-1" value={session.name} autoFocus onChange={(e) => renameChat(session.id, e.target.value)} onBlur={() => setEditingSessionId(null)} onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setEditingSessionId(null);
+                    }
+                  }} />
                 ) : (
                   <button onClick={() => loadChat(session.id)} className="truncate flex-1 text-left">{session.name}</button>
                 )}
@@ -161,7 +182,13 @@ export default function Chatbot() {
           {sessions.find((s) => s.id === currentSession)?.name || "Novo Chat"} - {availableModels.find(m => m.value === selectedModel)?.name}
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4">{messages.map((msg, index) => <div key={index} className={`p-3 rounded-lg max-w-[80%] ${msg.user ? "ml-auto bg-blue-500" : "mr-auto bg-gray-700"}`}>{msg.user || msg.bot}</div>)}</div>
-        <div className="p-4 bg-gray-800 flex items-center"><input type="text" className="flex-1 p-2 bg-gray-700 text-white" placeholder="Digite sua mensagem..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendMessage()} /><button onClick={sendMessage} className="ml-2 p-2 bg-blue-600 hover:bg-blue-700"><Send size={20} /></button></div>
+        <div className="p-4 bg-gray-800 flex items-center"><input type="text" className="flex-1 p-2 bg-gray-700 text-white" placeholder="Digite sua mensagem..." value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    setEditingSessionId(null);
+    sendMessage();
+  }
+}}
+ /><button onClick={sendMessage} className="ml-2 p-2 bg-blue-600 hover:bg-blue-700"><Send size={20} /></button></div>
       </div>
     </div>
   );
