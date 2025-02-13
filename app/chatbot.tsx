@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import localforage from "localforage";
 import { v4 as uuidv4 } from "uuid";
-import { Send, Menu, Pencil, Trash2 } from "lucide-react";
+import { Send, Pencil, Trash2 } from "lucide-react";
 
 // Definição de endpoints para cada modelo
 const modelRoutes = {
-  gpt: "http://127.0.0.1:5000/gpt/chat",
-  deepseek: "http://127.0.0.1:5000/deepseek/chat",
+  gpt: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/gpt/chat",
+  deepseek: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/deepseek/chat",
 };
 
 // Lista de modelos disponíveis
@@ -22,7 +22,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [currentSession, setCurrentSession] = useState(null);
   const [selectedModel, setSelectedModel] = useState(availableModels[0].value);
@@ -53,7 +53,7 @@ export default function Chatbot() {
     const newSessionId = uuidv4();
     const newSession = {
       id: newSessionId,
-      name: `Chat ${sessions.length + 1}`,
+      name: `Chat ${sessions.length + 1} - ${availableModels.find(m => m.value === selectedModel)?.name}`,
       model: selectedModel, // Define o modelo do chat com base no dropdown atual
       messages: [],
     };
@@ -108,6 +108,7 @@ export default function Chatbot() {
         );
       }
     } catch (error) {
+      console.error("Erro ao enviar mensagem:", error); 
       setMessages((prev) => [...prev, { user: "", bot: "Erro ao conectar ao servidor." }]);
     }
 
