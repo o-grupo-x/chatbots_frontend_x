@@ -1,55 +1,59 @@
-.frame{
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(31 41 55);
-    color: #fff;
+.frame {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(31 41 55);
+  color: #fff;
 }
-.card{
-    background-color: hsl(215, 20%, 25%);
-    width: 20vw;
-    padding: 20px;
-    border-radius: 18px;
+.card {
+  background-color: hsl(215, 20%, 25%);
+  width: 20vw;
+  padding: 20px;
+  border-radius: 18px;
+  -webkit-box-shadow: -4px 6px 20px -4px rgba(0, 0, 0, 0.51);
+  -moz-box-shadow: -4px 6px 20px -4px rgba(0, 0, 0, 0.51);
+  box-shadow: -4px 6px 20px -4px rgba(0, 0, 0, 0.51);
 }
-.cardHeader{
-    margin-bottom: 20px;
+.cardHeader {
+  margin-bottom: 20px;
 }
-.cardBody{
-    display: flex;
+.cardBody {
+  display: flex;
 }
-.loginForm{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
-.loginFieldset{
-    display: flex;
-    width: 100%;
-    gap: 10px;
-    align-items: center;
+.loginFieldset {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
 }
-.loginFieldset>label{
-    width: 30%;
+.loginFieldset > label {
+  width: 30%;
 }
-.loginInput{
-    border-radius: 8px;
-    color: hsl(215, 28%, 17%);
-    padding: 4px 0 4px 8px;
+.loginInput {
+  border-radius: 8px;
+  color: hsl(215, 28%, 17%);
+  padding: 4px 0 4px 8px;
 }
-.btnEntrar{
-    padding: 4px 16px;
-    background-color:  hsl(224, 76%, 48%);
-    border-radius: 12px;
+.btnEntrar {
+  padding: 4px 16px;
+  background-color: hsl(224, 76%, 48%);
+  border-radius: 12px;
 }
-.btnEntrar:hover{
-    background-color:  hsl(224, 85%, 32%);
+.btnEntrar:hover {
+  background-color: hsl(224, 85%, 32%);
 }
-.btnRow{
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
+.btnRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
 }

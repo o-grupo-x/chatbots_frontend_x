@@ -1,6 +1,5 @@
 "use client";
 
-
 import React, { useState } from "react";
 import style from "./cadastrar.module.css";
 import Link from "next/link";
@@ -12,7 +11,7 @@ export default function Cadastrar() {
 
   const handleCadastro = async (e) => {
     e.preventDefault();
-    
+
     if (senha !== confirmaSenha) {
       alert("As senhas não coincidem!");
       return;
@@ -21,7 +20,10 @@ export default function Cadastrar() {
     const db = await openDB("grupo-x", 1, {
       upgrade(db) {
         if (!db.objectStoreNames.contains("usuarios")) {
-          db.createObjectStore("usuarios", { keyPath: "id", autoIncrement: true });
+          db.createObjectStore("usuarios", {
+            keyPath: "id",
+            autoIncrement: true,
+          });
         }
       },
     });
@@ -75,10 +77,10 @@ export default function Cadastrar() {
               />
             </fieldset>
             <div className={style.btnRow}>
-              <button type="submit" className={style.btnCadastrar}>Cadastre-se</button>
-              <button className={style.btnEntrar}>
-                <Link href='/login'>Voltar para login</Link>
+              <button type="submit" className={style.btnCadastrar}>
+                Cadastre-se
               </button>
+              <Link href="/login">Voltar para login</Link>
             </div>
           </form>
         </div>
