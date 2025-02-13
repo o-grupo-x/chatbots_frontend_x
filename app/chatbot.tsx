@@ -29,13 +29,10 @@ export default function Chatbot() {
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
 
   useEffect(() => {
-    localforage.getItem("chat_sessions").then((storedSessions) => {
-      if (Array.isArray(storedSessions)) {
-        setSessions(storedSessions);
-      } else {
-        setSessions([]); // Garante que `sessions` será sempre um array
-      }
-    });
+    localforage.getItem<{ id: string; name: string; model: string; messages: { user: string; bot: string }[] }[]>("chat_sessions")
+      .then((storedSessions) => {
+        setSessions(storedSessions ?? []); // Se for null/undefined, seta um array vazio
+      });
   }, []);
   
 
