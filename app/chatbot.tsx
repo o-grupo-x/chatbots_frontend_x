@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import localforage from "localforage";
 import { v4 as uuidv4 } from "uuid";
-import { Send, Menu, Pencil, Trash2 } from "lucide-react";
+import { Send, Pencil, Trash2 } from "lucide-react";
 
 // Definição de endpoints para cada modelo
 const modelRoutes = {
@@ -22,7 +22,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [currentSession, setCurrentSession] = useState(null);
   const [selectedModel, setSelectedModel] = useState(availableModels[0].value);
@@ -108,6 +108,7 @@ export default function Chatbot() {
         );
       }
     } catch (error) {
+      console.error("Erro ao enviar mensagem:", error); 
       setMessages((prev) => [...prev, { user: "", bot: "Erro ao conectar ao servidor." }]);
     }
 
