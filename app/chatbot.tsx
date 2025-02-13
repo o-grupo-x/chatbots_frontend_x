@@ -8,8 +8,8 @@ import { Send, Pencil, Trash2 } from "lucide-react";
 
 // Definição de endpoints para cada modelo
 const modelRoutes = {
-  gpt: "http://127.0.0.1:5000/gpt/chat",
-  deepseek: "http://127.0.0.1:5000/deepseek/chat",
+  gpt: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/gpt/chat",
+  deepseek: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/deepseek/chat",
 };
 
 // Lista de modelos disponíveis
