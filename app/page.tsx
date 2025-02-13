@@ -2,10 +2,8 @@
 
 import dynamic from "next/dynamic";
 
-const Chatbot = dynamic(() => import("./chatbot"), { ssr: false });
-// const Login = dynamic(() => import("./login"), { ssr: false });
+const Login = dynamic(() => import("./login/page"), { ssr: false });
 
 export default function Page() {
-  return <Chatbot />;
-  // return <Login />;
+  return <Login />;
 }
