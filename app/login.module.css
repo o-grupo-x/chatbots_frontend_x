@@ -1,0 +1,16 @@
+.frame{
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(31 41 55);
+}
+.h1Class{
+    font-size: 3rem;
+    color: rgb(31 41 55);
+}
+.labelClass, .buttonClass{
+    color: rgb(31 41 55);
+}

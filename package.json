@@ -9,8 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroui/card": "^2.2.10",
+    "@heroui/form": "^2.1.9",
+    "@heroui/react": "^2.6.14",
+    "@heroui/system": "^2.4.7",
+    "@heroui/theme": "^2.4.6",
     "axios": "^1.7.9",
     "chat_bot": "file:",
+    "framer-motion": "^12.4.2",
     "localforage": "^1.10.0",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",
