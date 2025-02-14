@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import axios from "axios";
 import localforage from "localforage";
 import { v4 as uuidv4 } from "uuid";
-import { Send, Menu, Pencil, Trash2 } from "lucide-react";
+import { Send, Pencil, Trash2 } from "lucide-react";
 
 // Definição de endpoints para cada modelo
 const modelRoutes = {
-  gpt: "http://127.0.0.1:5000/gpt/chat",
-  deepseek: "http://127.0.0.1:5000/deepseek/chat",
+  gpt: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/gpt/chat",
+  deepseek: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/deepseek/chat",
 };
 
 // Lista de modelos disponíveis
@@ -19,29 +19,31 @@ const availableModels = [
 ];
 
 export default function Chatbot() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<{ user: string; bot: string }[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sessions, setSessions] = useState([]);
-  const [currentSession, setCurrentSession] = useState(null);
+  const [sidebarOpen] = useState(false);
+  const [sessions, setSessions] = useState<{ id: string; name: string; model: string; messages: { user: string; bot: string }[] }[]>([]);
+  const [currentSession, setCurrentSession] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState(availableModels[0].value);
-  const [editingSessionId, setEditingSessionId] = useState(null);
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
 
   useEffect(() => {
-    localforage.getItem("chat_sessions").then((storedSessions) => {
-      if (storedSessions) setSessions(storedSessions);
-    });
+    localforage.getItem<{ id: string; name: string; model: string; messages: { user: string; bot: string }[] }[]>("chat_sessions")
+      .then((storedSessions) => {
+        setSessions(storedSessions ?? []); // Se for null/undefined, seta um array vazio
+      });
   }, []);
+  
 
   useEffect(() => {
     localforage.setItem("chat_sessions", sessions);
   }, [sessions]);
 
   const getApiRoute = () =>
-    modelRoutes[availableModels.find((m) => m.value === selectedModel)?.type || "gpt"];
+    modelRoutes[availableModels.find((m) => m.value === selectedModel)?.type as keyof typeof modelRoutes || "gpt"];
 
-  const renameChat = (sessionId, newName) => {
+  const renameChat = (sessionId: string, newName: string) => {
     setSessions((prevSessions) =>
       prevSessions.map((session) =>
         session.id === sessionId ? { ...session, name: newName } : session
@@ -53,7 +55,7 @@ export default function Chatbot() {
     const newSessionId = uuidv4();
     const newSession = {
       id: newSessionId,
-      name: `Chat ${sessions.length + 1}`,
+      name: `Chat ${sessions.length + 1} - ${availableModels.find(m => m.value === selectedModel)?.name}`,
       model: selectedModel, // Define o modelo do chat com base no dropdown atual
       messages: [],
     };
@@ -62,7 +64,7 @@ export default function Chatbot() {
     setCurrentSession(newSessionId);
   };
 
-  const deleteChat = (sessionId) => {
+  const deleteChat = (sessionId: string | null) => {
     setSessions(sessions.filter((session) => session.id !== sessionId));
     if (currentSession === sessionId) {
       setMessages([]);
@@ -70,7 +72,7 @@ export default function Chatbot() {
     }
   };
 
-  const loadChat = (sessionId) => {
+  const loadChat = (sessionId: SetStateAction<string | null>) => {
     const session = sessions.find((s) => s.id === sessionId);
     if (session) {
       setCurrentSession(sessionId);
@@ -108,6 +110,7 @@ export default function Chatbot() {
         );
       }
     } catch (error) {
+      console.error("Erro ao enviar mensagem:", error); 
       setMessages((prev) => [...prev, { user: "", bot: "Erro ao conectar ao servidor." }]);
     }
 
