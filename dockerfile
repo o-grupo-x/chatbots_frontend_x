@@ -1,19 +1,22 @@
-# Usando a imagem oficial do Node.js
-FROM node:18 AS builder
+# Etapa de build
+FROM node:20-bullseye AS builder
 
 WORKDIR /app
 
-# Copia os arquivos do projeto
 COPY package.json package-lock.json ./
-RUN npm install
+
+# Adicionar variável de ambiente para evitar problemas de memória
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
-# Compila o projeto Next.js
+# Compilar o Next.js
 RUN npm run build
 
-# Segunda fase para servir o app
-FROM node:18-alpine
+# Etapa final para rodar a aplicação
+FROM node:20-alpine
 
 WORKDIR /app
 
