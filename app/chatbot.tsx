@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import axios from "axios";
 import localforage from "localforage";
 import { v4 as uuidv4 } from "uuid";
@@ -8,8 +8,8 @@ import { Send, Pencil, Trash2 } from "lucide-react";
 
 // Definição de endpoints para cada modelo
 const modelRoutes = {
-  gpt: "http://127.0.0.1:5000/gpt/chat",
-  deepseek: "http://127.0.0.1:5000/deepseek/chat",
+  gpt: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/gpt/chat",
+  deepseek: "https://chatgptbotia-geghh4dpcrc2cndr.brazilsouth-01.azurewebsites.net/deepseek/chat",
 };
 
 // Lista de modelos disponíveis
@@ -61,6 +61,7 @@ export default function Chatbot() {
   modelRoutes[(availableModels.find((m) => m.value === selectedModel)?.type as ModelType) || "gpt"];
 
   const renameChat = async (sessionId: string, newName: string) => {
+
     setSessions((prevSessions) =>
       prevSessions.map((session) =>
         session.id === sessionId ? { ...session, name: newName } : session
@@ -102,6 +103,7 @@ export default function Chatbot() {
       setCurrentSession(null);
     }
   };
+
 
   const loadChat = (sessionId: string) => {
     const session = sessions.find((s) => s.id === sessionId);
